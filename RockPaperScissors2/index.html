@@ -13,9 +13,30 @@
     <button onclick="playGame('rock')">Rock</button>
     <button onclick="playGame('paper')">Paper</button>
     <button onclick="playGame('scissors')">Scissors</button>
+    <button onclick="
+        score.wins = 0;
+        score.loses = 0;
+        score.draws = 0;
+    ">Reset Score</button>
 
     <!-- JavaScript Block -->
     <script>
+        let score = JSON.parse(localStorage.getItem('score')) || {
+            wins: 0,
+            loses: 0,
+            draws: 0
+        };
+
+        /*
+        if (!score) {
+            score = {
+                wins: 0,
+                loses: 0,
+                draws: 0
+            };
+        }
+        */
+
         function playGame(playerMove) {
             console.log(pickComputerMove());
             
@@ -50,7 +71,19 @@
 
             }
 
-            alert(`You picked ${playerMove}. Computer picked ${computerMove}. ${result}`);
+            // Update score based on the result
+            if (result === 'You win') {
+                score.wins += 1;
+            } else if (result === 'You lose') {
+                score.loses += 1;
+            } else if (result === 'Draw') {
+                score.draws += 1;
+            }
+
+            localStorage.setItem("score", JSON.stringify(score));
+
+            alert(`You picked ${playerMove}. Computer picked ${computerMove}. ${result}\nWins: ${score.wins}; Loses: ${score.loses}; Draws: ${score.draws}
+            `);
         }
 
         let computerMove = '';
